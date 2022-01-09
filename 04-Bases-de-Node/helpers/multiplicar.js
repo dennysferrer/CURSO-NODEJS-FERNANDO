@@ -1,10 +1,14 @@
+const { rejects } = require('assert');
 const fs = require('fs');
 
 const crearArchivo = (base) => {
-    console.clear()
-    console.log("======================");
-    console.log(`TABLA DEL ${base}`);
-    console.log("======================");
+    const promesaCrearArchivo = new Promise((resolve,rejects) => {
+        console.clear()
+        console.log("======================");
+        console.log(`TABLA DEL ${base}`);
+        console.log("======================");
+    })
+    
 
     let salida = '';
     for (let i=0; i<=10; i++){
