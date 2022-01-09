@@ -1,7 +1,6 @@
-const { rejects } = require('assert');
 const fs = require('fs');
 
-const crearArchivo = (base) => {
+const crearArchivo = (base, listar) => {
     const promesaCrearArchivo = new Promise((resolve,reject) => {
         console.clear()
         console.log("======================");
@@ -12,9 +11,14 @@ const crearArchivo = (base) => {
             salida += `${base} * ${i} = ${base*i}\n`;
         }
         if (salida){
-            console.log(salida);
-            fs.writeFileSync(`tabla-${base}.txt`, salida);
-            resolve(`tabla-${base}`);
+            if (listar){
+                console.log(salida);
+                fs.writeFileSync(`tabla-${base}.txt`, salida);
+                resolve(`tabla-${base}`);
+            } else {
+                fs.writeFileSync(`tabla-${base}.txt`, salida);
+                resolve(`tabla-${base}`);
+            }
         } else {
             reject('El archivo no existe ...');
         }
