@@ -6,8 +6,9 @@ console.clear();
 
 const base = argv.b;
 const listar = argv.l;
+const hasta = argv.h;
 
-crearArchivo(base, listar)
+crearArchivo(base, listar, hasta)
     .then(nombreArchivo => {
         console.log(`${nombreArchivo} creado satisfactoriamente ...`);
     })
