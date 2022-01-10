@@ -1,0 +1,22 @@
+{
+  "name": "04-apptareas",
+  "version": "0.0.1",
+  "description": "Aplicación de tareas en consola con NodeJS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dennysferrer/CURSO-NODEJS-FERNANDO.git"
+  },
+  "author": "@dennysferrer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dennysferrer/CURSO-NODEJS-FERNANDO/issues"
+  },
+  "homepage": "https://github.com/dennysferrer/CURSO-NODEJS-FERNANDO#readme",
+  "dependencies": {
+    "colors": "^1.4.0"
+  }
+}
