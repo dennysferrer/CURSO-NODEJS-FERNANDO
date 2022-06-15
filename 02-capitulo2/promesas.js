@@ -36,9 +36,13 @@ const getSalario = (id) => {
 }
 
 getEmpleado(id)
-    .then(empleado => console.log(empleado))
+    .then(empleado => {
+        getSalario(id)
+            .then(salario => console.log(salario))
+            .catch(err => console.log(err))
+    })
     .catch(err => console.log(err))
 
-getSalario(id)
-    .then(salario => console.log(salario))
-    .catch(err => console.log(err))
+
+
+
