@@ -35,7 +35,7 @@ const getSalario = (id) => {
     })
 }
 
-const id = 3;
+const id = 2;
 
 const getInfoUsuario = async(id) => {
     try {

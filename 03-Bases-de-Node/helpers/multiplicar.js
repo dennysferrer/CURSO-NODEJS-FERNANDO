@@ -1,32 +1,23 @@
+
 const fs = require('fs');
 
+const crearArchivo = async (base) => {
+    
+    console.log(`***** TABLA DEL ${base} *****`);
 
-const crearArchivo = (base, listar, hasta) => {
-    const promesaCrearArchivo = new Promise((resolve,reject) => {
-        console.clear()
-        console.log("======================");
-        console.log(`   TABLA DEL ${base}`);
-        console.log("======================");
-        let salida = '';
-        for (let i=0; i<=hasta; i++){
-            salida += `${base} * ${i} = ${base*i}\n`;
-        }
-        if (salida){
-            if (listar){
-                console.log(salida);
-                fs.writeFileSync(`./salida/tabla-${base}.txt`, salida);
-                resolve(`tabla-${base}`);
-            } else {
-                fs.writeFileSync(`tabla-${base}.txt`, salida);
-                resolve(`tabla-${base}`);
-            }
-        } else {
-            reject('El archivo no existe ...');
-        }
-        
-    })
-    return promesaCrearArchivo;
+    let salida = '';
 
+    for (let i=1; i<=10; i++){
+        salida += `${base} * ${i} = ${base*i}\n`;
+    }
+
+    console.log(salida);
+
+    let archivo = await fs.writeFileSync(`tabla-${base}.txt`, salida);
+    console.log(`tabla-${base} creada...`);
+
+    return archivo;
+    
 }
 
 module.exports = {

@@ -1,16 +1,10 @@
-const { crearArchivo } = require ('./helpers/multiplicar.js');
-const { argv } = require('./config/yargs');
-
 const fs = require('fs');
+const { crearArchivo } = require('./helpers/multiplicar');
+
+
 console.clear();
+const base = 6;
 
-const base = argv.b;
-const listar = argv.l;
-const hasta = argv.h;
-
-crearArchivo(base, listar, hasta)
-    .then(nombreArchivo => {
-        console.log(`${nombreArchivo} creado satisfactoriamente ...`);
-    })
-    .catch(err => console.log(err))
-
+crearArchivo(base)
+    .then(() => console.log(`Tabla del ${base} creada ...`))
+    .catch (err => console.log(err))
