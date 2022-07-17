@@ -7,13 +7,15 @@ const crearArchivo = async (base, listar, hasta) => {
     console.log(`***** TABLA DEL ${base} *****`.underline.green);
 
     let salida = '';
+    let salida2 = '';
 
     for (let i=1; i<=hasta; i++){
-        salida += `${colors.yellow(base)} * ${colors.blue(i)} = ${colors.red(base*i)}\n`;
+        salida += `${base} * ${i} = ${base*i}\n`;
+        salida2 += `${colors.yellow(base)} * ${colors.blue(i)} = ${colors.red(base*i)}\n`;
     }
 
     if (listar){
-        console.log(salida);
+        console.log(salida2);
     } else {
         console.log('Tabla no listada ...');
     }
