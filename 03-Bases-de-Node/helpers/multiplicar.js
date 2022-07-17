@@ -1,7 +1,7 @@
-
 const fs = require('fs');
 
-const crearArchivo = async (base) => {
+
+const crearArchivo = async (base, listar) => {
     
     console.log(`***** TABLA DEL ${base} *****`);
 
@@ -11,9 +11,14 @@ const crearArchivo = async (base) => {
         salida += `${base} * ${i} = ${base*i}\n`;
     }
 
-    console.log(salida);
+    if (listar){
+        console.log(salida);
+    } else {
+        console.log('Tabla no listada ...');
+    }
+    
 
-    let archivo = await fs.writeFileSync(`tabla-${base}.txt`, salida);
+    let archivo = await fs.writeFileSync(`./salida/tabla-${base}.txt`, salida);
     console.log(`tabla-${base} creada...`);
 
     return archivo;
