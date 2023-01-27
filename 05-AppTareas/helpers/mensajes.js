@@ -1,53 +1,54 @@
-const { read } = require('fs');
-const { resolve } = require('path');
-
 require('colors');
+const { rejects } = require('node:assert');
+const { resolve } = require('node:path');
+const readline = require('node:readline');
+
 
 const mostrarMenu = () => {
 
-    return new Promise( resolve => {
+    return new Promise((resolve, rejects) => {
         console.clear();
-        console.log("========================".green);
-        console.log("Seleccione una Opción".green);
-        console.log("========================\n".green);
+        console.log('=========================='.yellow);
+        console.log(' Seleccione una opcion '.blue);
+        console.log('==========================\n'.red);
 
-        console.log(`${'1'.green}. Crear Tareas`);
-        console.log(`${'2'.green}. Listar Tareas`);
-        console.log(`${'3'.green}. Listar Tareas Completadas`);
-        console.log(`${'4'.green}. Listar Tareas Pendientes`);
-        console.log(`${'5'.green}. Completar Tarea(s)`);
-        console.log(`${'6'.green}. Borrar Tarea`);
+        console.log(`${'1'.green}. Crear tareas`);
+        console.log(`${'2'.green}. Listar tareas`);
+        console.log(`${'3'.green}. Listar tareas completadas`);
+        console.log(`${'4'.green}. Listar tareas pendientes`);
+        console.log(`${'5'.green}. Completar tarea(s)`);
+        console.log(`${'6'.green}. Borrar tarea`);
         console.log(`${'0'.green}. Salir\n`);
 
-        const readline = require('readline').createInterface({
+        const rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
-        readline.question('Seleccione una opción: ', (opt) => {
-            readline.close();
+
+        rl.question('Seleccione una opcion: ', (opt) => {
+            rl.close();
             resolve(opt);
-        })
-    })
+        });
+
+    });
 }
 
 const pausa = () => {
 
-    return new Promise(resolve => {
-        const readline = require('readline').createInterface({
+    return new Promise((resolve, reject) => {
+        const rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
-        readline.question(`\n Presiones ${'ENTER'.green} para continuar \n`, () => {
-            readline.close();
-            resolve();
+        
+        rl.question(`\n Presione ${'ENTER'.green} para continuar \n`, (opt) => {
+            rl.close();
+            resolve()
         })
-    })
-    
+    });
 }
-
 
 module.exports = {
     mostrarMenu,
     pausa
 }
-
