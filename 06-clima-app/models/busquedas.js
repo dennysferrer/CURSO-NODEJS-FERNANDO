@@ -1,35 +1,90 @@
+const fs = require('fs');
+
 const axios = require('axios');
 
 class Busquedas {
-    historial = ['Tegucigalpa', 'Madrid', 'San Jose', 'Bogota', 'Caracas', 'Miami']
+    historial = [];
+    dbPath = './db/database.json';
 
     constructor(){
-        //TODO: leer DB si existe
+        this.leerDB();
     }
 
     async ciudad(lugar = ''){
-        //peticion http
-        //console.log('ciudad', lugar);
+
         try {
-            const resp = await axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/Madrid.json?proximity=ip&types=place%2Cpostcode%2Caddress&language=es&access_token=pk.eyJ1IjoiZGVubnlzZmVycmVyIiwiYSI6ImNsYTh6Yzh3OTA2NG0zcHF1Y3k5NjdnZnEifQ.UaiD48uumztY0SXSv4f-3g');
-            console.log(resp.data);
 
-            return []; // retornar arreglo con todas las ciudades que coincidas con el lugar
+            //peticion http
+            const instace = {
+                baseURL : `https://api.mapbox.com/geocoding/v5/mapbox.places/${lugar}.json`,
+                params : {
+                    'access_token' : `${process.env.MAPBOX_KEY}`,
+                    'limit' : 5,
+                    'language' : 'es'    
+                }
+            }
 
+            const peticion = axios.create(instace);
+            const resp = await peticion.get();
+
+            return resp.data.features.map(lugar => ({
+                id: lugar.id,
+                nombre: lugar.place_name,
+                longitud: lugar.center[0],
+                latitud: lugar.center[1]
+            }));
 
         } catch (error) {
-            console.log(error);
-            return []
+           console.log('Error en la aplicacion');
+           return [];
         }
-        
-
-        
+       
     }
+
+    async clima(lat, long) {
+        const instace = {
+            baseURL : `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=be4ae56ddfbc6f8f898242f8da3a7981`,
+            params : {
+                'appid' : `${process.env.OPENWEATHER_KEY}` 
+            }
+        }
+
+        const peticionClima = axios.create(instace);
+        const respClima = await peticionClima.get();
+
+        return (respClima.data);
+    }
+
+    agregarHistorial(lugar = '') {
+        //Prevenir duplicidad
+
+        if (this.historial.includes(lugar.toLowerCase())){
+            return;
+        }
+        // Guardar historial
+        this.historial.unshift(lugar);
+    }
+
+    guardarDB(){
+
+        const payload = {
+            historial: this.historial
+        };
+
+        fs.writeFileSync(this.dbPath, JSON.stringify(payload));
+    }
+
+    leerDB(){
+        if (!fs.existsSync(this.dbPath)){
+            return null;
+        }
+
+        const info = fs.readFileSync(this.dbPath, 'utf-8');
+        const data = JSON.parse(info);
+
+        return data;
+    }
+
 }
 
-
-
-
-
 module.exports = Busquedas;
-
