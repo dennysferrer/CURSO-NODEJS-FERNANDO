@@ -1,16 +1,15 @@
+require('dotenv').config();
 const express = require('express');
 const hbs = require('hbs');
 
 
 
 const app = express();
-const port = 8080;
+const port = process.env.PORT;
 
 // Handlebars
 app.set('view engine', 'hbs');
-hbs.registerPartials(__dirname + '/views/partials', (error) => {
-    console.log(error);
-});
+hbs.registerPartials(__dirname + '/views/partials');
 
 
 //Servir contendio estatico
@@ -45,7 +44,7 @@ app.get('/elements', (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(__dirname + '/public/404.html');
+    res.render('404');
 });
 
 
