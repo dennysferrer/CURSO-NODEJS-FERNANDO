@@ -1,46 +1,62 @@
-const { response, request } = require('express');
+//const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 const Usuario = require('../models/usuario');
-const { validationResult } = require('express-validator');
+const { validarCampos } = require('../middlewares/validar-campos');
 
 
-const usuariosGet = (req = request, res = response) => {
 
-    const query = req.query;
+const usuariosGet = async (req = request, res = response) => {
+
+    const { limite=5, desde=0 } = req.query;
+
+    const [ total, usuarios ] = await Promise.all([
+        Usuario.countDocuments({estado: true}),
+        Usuario.find({estado: true})
+            .skip(desde)
+            .limit(limite)
+    ]);
 
     res.json({
         msg: 'get API - Controlador',
-        query
+        total,
+        usuarios
     });
 };
 
-const usuariosPut = (req, res = response) => {
+const usuariosPut = async (req, res = response) => {
 
-    const id = req.params.id;
+    const { id } = req.params;
+
+    const { _id, password, google, correo, ...resto } = req.body;
+
+    //console.log(resto);
+
+    //Validar contra base de datos
+    if ( password ){
+        //Encriptar la contraseña
+        const salt = bcryptjs.genSaltSync(10);
+        resto.password = bcryptjs.hashSync(password, salt);
+    }
+
+    
+    const usuario = await Usuario.findByIdAndUpdate(id, resto);
+
     res.json({
         msg: 'put API - Controlador',
-        id
+        usuario
     });
 };
 
 const usuariosPost = async (req, res = response) => {
 
     //Se valida que el formato del correo sea correcto segun el middleware puesto en la ruta post
-    const errores = validationResult(req);
-    if (!errores.isEmpty()){
-        return res.status(400).json(errores);
-    }
+    //validarCampos(req);
 
     const { nombre, correo, password, rol } = req.body;
     const usuario = new Usuario({nombre, correo, password, rol});
 
     //Verificar si el correo existe
-    const existeEmail = Usuario.findOne({ correo });
-    if (existeEmail){
-        return res.status(400).json({
-            msg: 'El correo ya está registrado'
-        })
-    }
+    
 
     //Encriptar la contraseña
     const salt = bcryptjs.genSaltSync(10);
@@ -56,9 +72,18 @@ const usuariosPost = async (req, res = response) => {
     });
 };
 
-const usuariosDelete = (req, res = response) => {
+const usuariosDelete = async (req, res = response) => {
+
+    const { id } = req.params;
+
+    //Borrar usuario fisicamente
+    //const usuario = await Usuario.findByIdAndDelete(id);
+
+    const usuario = await Usuario.findByIdAndUpdate(id, {estado: false})
+
     res.json({
-        msg: 'Delete API - Controlador'
+        msg: 'User Delete',
+        usuario
     });
 };
 
